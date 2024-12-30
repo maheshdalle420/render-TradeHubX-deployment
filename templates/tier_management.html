@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Subscription Tiers | TradeHubX</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f8f9fa;
+            font-family: 'Roboto', sans-serif;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .card-header {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mb-5">Manage Your Subscription Tier</h1>
+        <div class="row">
+            <!-- Bronze Tier -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-header bg-secondary text-white text-center">Bronze Tier</div>
+                    <div class="card-body">
+                        <ul>
+                            <li>5% discount on winning bids</li>
+                            <li>Wallet limit increased to ৳10,000</li>
+                            <li>Creating listing fee decreases to ৳2000 from ৳3000</li>
+                            <li>10% Bonus on Gamepoints converted to money</li>
+                        </ul>
+                        <form action="{{ url_for('upgrade_tier', new_tier='Bronze') }}" method="POST">
+                            <button type="submit" class="btn btn-primary w-100">Upgrade to Bronze (৳1000)</button>
+                        </form>
+                        <form action="{{ url_for('downgrade_tier', new_tier='None') }}" method="POST" class="mt-2">
+                            <button type="submit" class="btn btn-secondary w-100">Downgrade to None</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Silver Tier -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-header bg-primary text-white text-center">Silver Tier</div>
+                    <div class="card-body">
+                        <ul>
+                            <li>10% discount on winning bids</li>
+                            <li>Priority email notifications for auctions</li>
+                            <li>Wallet limit increased to ৳50,000</li>
+                            <li>Creating listing fee decreases to ৳1000 from ৳2000</li>
+                            <li>20% Bonus on Gamepoints converted to money</li>
+                        </ul>
+                        <form action="{{ url_for('upgrade_tier', new_tier='Silver') }}" method="POST">
+                            <button type="submit" class="btn btn-primary w-100">Upgrade to Silver (৳3000)</button>
+                        </form>
+                        <form action="{{ url_for('downgrade_tier', new_tier='Bronze') }}" method="POST" class="mt-2">
+                            <button type="submit" class="btn btn-secondary w-100">Downgrade to Bronze</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Gold Tier -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-header bg-warning text-dark text-center">Gold Tier</div>
+                    <div class="card-body">
+                        <ul>
+                            <li>20% discount on winning bids</li>
+                            <li>Priority email notifications for auctions</li>
+                            <li>Wallet limit increased to ৳100,000</li>
+                            <li>Creating listing fee decreases to ৳500 from ৳1000</li>
+                            <li>50% Bonus on Gamepoints converted to money</li>
+                            <li>Exclusive rewards for games</li>
+                        </ul>
+                        <form action="{{ url_for('upgrade_tier', new_tier='Gold') }}" method="POST">
+                            <button type="submit" class="btn btn-primary w-100">Upgrade to Gold (৳5000)</button>
+                        </form>
+                        <form action="{{ url_for('downgrade_tier', new_tier='Silver') }}" method="POST" class="mt-2">
+                            <button type="submit" class="btn btn-secondary w-100">Downgrade to Silver</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary mt-3">Back to Dashboard</a>
+    </div>
+</body>
+</html>

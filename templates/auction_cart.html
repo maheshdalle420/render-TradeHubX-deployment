@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auction Cart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Roboto', sans-serif;
+            overflow-x: hidden;
+        }
+        .container {
+            margin-top: 30px;
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        }
+        .card-title {
+            font-weight: bold;
+            color: #343a40;
+        }
+        .btn {
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #495057;
+            color: white;
+        }
+        .section-title {
+            font-weight: bold;
+            color: #6c757d;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background-color: #343a40;
+            margin: 10px auto;
+        }
+        .animate-fade-in {
+            animation: fadeIn 1s;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        .flash-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+            animation: fadeIn 1s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5 animate-fade-in">
+        <h1 class="text-center section-title">Auction Cart</h1>
+        <!-- Unpaid Auctions Section -->
+        <section class="mb-5">
+            <h2 class="text-danger section-title">Unpaid Auctions</h2>
+            {% if unpaid_auctions %}
+                <div class="row">
+                    {% for auction in unpaid_auctions %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card shadow-sm mb-4 animate-fade-in">
+                                <img src="{{ url_for('static', filename='uploads/' + (auction.image_filename if auction.image_filename else 'default.png')) }}" alt="{{ auction.title }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ auction.title }}</h5>
+                                    <p class="card-text">Winning Bid: ৳{{ auction.price }}</p>
+                                    {% if user.tier in ['Silver', 'Gold'] %}
+                                        <p class="text-muted">As a {{ user.tier }} member, you qualify for a {{ '10%' if user.tier == 'Silver' else '20%' }} discount.</p>
+                                    {% endif %}
+                                    <form method="POST" action="{{ url_for('pay_for_auction', property_id=auction.id) }}" onsubmit="return confirm('Are you sure you want to complete this payment?');">
+                                        <button type="submit" class="btn btn-success w-100">Pay Now</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted">No unpaid auctions. Start bidding to win!</p>
+            {% endif %}
+        </section>
+
+        <!-- Paid Auctions Section -->
+        <section class="mb-5">
+            <h2 class="text-success section-title">Paid Auctions</h2>
+            {% if paid_auctions %}
+                <div class="row">
+                    {% for auction in paid_auctions %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card shadow-sm mb-4 animate-fade-in">
+                                <img src="{{ url_for('static', filename='uploads/' + (auction.image_filename if auction.image_filename else 'default.png')) }}" alt="{{ auction.title }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ auction.title }}</h5>
+                                    <p class="card-text">Winning Bid: ৳{{ auction.price }}</p>
+                                    <p class="card-text text-muted">Payment Completed</p>
+                                    <a href="{{ url_for('auction_receipt', property_id=auction.id) }}" class="btn btn-primary w-100">View Receipt</a>
+                                    <a href="{{ url_for('rate_seller', property_id=auction.id) }}" class="btn btn-outline-primary w-100 mt-2">Rate Seller</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted">No paid auctions found. Complete payment to finalize your purchases!</p>
+            {% endif %}
+        </section>
+
+        <a href="{{ url_for('buyer_dashboard') }}" class="btn btn-secondary mt-3">Back to Dashboard</a>
+    </div>
+
+    <div class="flash-message">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

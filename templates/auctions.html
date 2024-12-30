@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Discover live, upcoming, and past property auctions on TradeHubX. Bid now, add properties to your wishlist, and explore winning details.">
+    <title>Property Auctions | TradeHubX</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/custom-styles.css">
+    <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Roboto', sans-serif;
+        }
+        .card {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        }
+        .card-img-top {
+            transition: opacity 0.5s ease;
+        }
+        .card:hover .card-img-top {
+            opacity: 0.9;
+        }
+        .countdown {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        footer {
+            background: #343a40;
+            color: #ffffff;
+        }
+        footer a {
+            color: #ffc107;
+            transition: color 0.2s ease-in-out;
+        }
+        footer a:hover {
+            color: #ffffff;
+        }
+        h2 {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+        h2::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: #007bff;
+            margin-top: 10px;
+            border-radius: 2px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <main class="container py-5 animate__animated animate__fadeIn">
+        <!-- Back to Profile Button -->
+        <div class="mb-4">
+            <a href="{{ url_for('buyer_dashboard') }}" class="btn btn-outline-secondary">&larr; Back to Buyer Profile</a>
+        </div>
+
+        <!-- Live Auctions Section -->
+        <section class="live-auctions mb-5">
+            <h2 class="text-primary mb-4">Live Auctions</h2>
+            {% if live_properties %}
+                <div class="row g-4">
+                    {% for auction in live_properties %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card shadow-sm h-100 animate__animated animate__fadeInUp">
+                                <img src="{{ url_for('static', filename='uploads/' + auction.image_filename) }}" alt="{{ auction.title }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ auction.title }}</h5>
+                                    <p class="card-text">{{ auction.description }}</p>
+                                    <p class="card-text">Seller: {{ auction.seller.username }}</p>
+                                    <p class="card-text">Seller Rating: {{ auction.seller.average_rating | default('N/A') }}</p>
+                                    <p class="card-text"><strong>Current Price:</strong> ৳{{ auction.price }}</p>
+                                    <p class="card-text">
+                                        <strong>Ends in:</strong> 
+                                        <span class="text-danger countdown" data-end-time="{{ auction.end_time }}"></span>
+                                    </p>
+                                    <div class="d-grid gap-2">
+                                        <a href="{{ url_for('bidding', property_id=auction.id) }}" class="btn btn-primary">Bid Now</a>
+                                        <form action="{{ url_for('add_to_wishlist', property_id=auction.id) }}" method="POST">
+                                            <button class="btn btn-outline-secondary" type="submit">Add to Wishlist</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted">No live auctions available right now. Check back soon!</p>
+            {% endif %}
+        </section>
+
+        <!-- Upcoming Auctions Section -->
+        <section class="upcoming-auctions mb-5">
+            <h2 class="text-primary mb-4">Upcoming Auctions</h2>
+            {% if upcoming_properties %}
+                <div class="row g-4">
+                    {% for auction in upcoming_properties %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card shadow-sm h-100 animate__animated animate__fadeInUp">
+                                <img src="{{ url_for('static', filename='uploads/' + auction.image_filename) }}" alt="{{ auction.title }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ auction.title }}</h5>
+                                    <p class="card-text">{{ auction.description }}</p>
+                                    <p class="card-text">
+                                        <strong>Starts in:</strong> 
+                                        <span class="text-warning countdown" data-end-time="{{ auction.start_time }}"></span>
+                                    </p>
+                                    <div class="d-grid gap-2">
+                                        <form action="{{ url_for('add_to_wishlist', property_id=auction.id) }}" method="POST">
+                                            <button class="btn btn-outline-secondary" type="submit">Add to Wishlist</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted">No upcoming auctions are scheduled at the moment.</p>
+            {% endif %}
+        </section>
+
+        <!-- Past Auctions Section -->
+        <section class="past-auctions mb-5">
+            <h2 class="text-primary mb-4">Past Auctions</h2>
+            {% if past %}
+                {% for entry in past %}
+                    <div class="card shadow-sm mb-3 animate__animated animate__fadeInUp">
+                        <img src="{{ url_for('static', filename='uploads/' + entry.auction.image_filename) }}" alt="{{ entry.auction.title }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ entry.auction.title }}</h5>
+                            <p class="card-text">{{ entry.auction.description }}</p>
+                            <p class="card-text"><strong>Ended at:</strong> {{ entry.auction.end_time }}</p>
+                            {% if entry.winner %}
+                                <p class="card-text"><strong>Winner:</strong> {{ entry.winner.user.email }}</p>
+                                <p class="card-text"><strong>Winning Bid:</strong> ৳{{ entry.winner.bid_amount }}</p>
+                            {% else %}
+                                <p class="card-text text-muted">No bids were placed for this auction.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-muted">No past auctions to display.</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer class="bg-dark text-white py-4">
+        <div class="container text-center">
+            <p class="mb-1">&copy; 2024 TradeHubX. All rights reserved.</p>
+            <p><a href="/terms" class="text-white text-decoration-none">Terms of Service</a> | <a href="/privacy" class="text-white text-decoration-none">Privacy Policy</a></p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Countdown Timer Script
+        document.querySelectorAll('.countdown').forEach(function (countdown) {
+            const endTime = new Date(countdown.dataset.endTime).getTime();
+
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const distance = endTime - now;
+
+                if (distance < 0) {
+                    countdown.textContent = 'Auction ended.';
+                    return;
+                }
+
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000)) / 1000);
+
+                countdown.textContent = `${hours}h ${minutes}m ${seconds}s`;
+            }
+
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        });
+    </script>
+</body>
+</html>

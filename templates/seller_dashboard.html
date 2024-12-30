@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Dashboard | TradeHubX</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to bottom, #121212, #1c1c1c);
+            color: #f8f9fa;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            margin-top: 50px;
+            max-width: 900px;
+            background: #212529;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            padding: 40px;
+        }
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #adb5bd;
+        }
+        .btn-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+        .btn {
+            padding: 15px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 10px;
+            transition: all 0.3s ease-in-out;
+        }
+        .btn-primary {
+            background: linear-gradient(to right, #0066ff, #0056b3);
+            border: none;
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(to right, #007bff, #0062cc);
+            transform: scale(1.05);
+        }
+        .btn-secondary {
+            background: linear-gradient(to right, #495057, #6c757d);
+            border: none;
+            color: #fff;
+        }
+        .btn-secondary:hover {
+            background: linear-gradient(to right, #343a40, #495057);
+            transform: scale(1.05);
+        }
+        .rating-section {
+            margin-top: 40px;
+            background: #343a40;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+        }
+        .rating-section h2 {
+            font-size: 2rem;
+            color: #f8f9fa;
+            margin-bottom: 15px;
+        }
+        .rating-list {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px 0;
+        }
+        .rating-list li {
+            list-style: none;
+            padding: 15px 0;
+            border-bottom: 1px solid #495057;
+        }
+        .rating-list li:last-child {
+            border-bottom: none;
+        }
+        .rating-list strong {
+            color: #f8f9fa;
+        }
+        .rating-list em {
+            color: #adb5bd;
+            font-style: italic;
+        }
+        .rating-list small {
+            color: #868e96;
+        }
+        .back-to-dashboard {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: linear-gradient(to right, #495057, #6c757d);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease-in-out;
+        }
+        .back-to-dashboard:hover {
+            background: linear-gradient(to right, #343a40, #495057);
+            transform: translateY(-2px);
+        }
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #868e96;
+            padding-top: 20px;
+            border-top: 1px solid #495057;
+        }
+        footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container text-center">
+        <h1>Seller Dashboard</h1>
+        <p>Manage your listings, view live auctions, and track sold items with ease.</p>
+        
+        <!-- Ratings Section -->
+        <div class="rating-section text-start">
+            <h2>Your Ratings</h2>
+            {% if average_rating %}
+                <p><strong>Average Rating:</strong> <span class="text-warning">{{ average_rating }}</span> / 5</p>
+                <ul class="rating-list">
+                    {% for feedback in feedbacks %}
+                        <li>
+                            <strong>Rating:</strong> {{ feedback.rating }} / 5<br>
+                            <em>"{{ feedback.feedback }}"</em><br>
+                            <small>Received on {{ feedback.timestamp.strftime('%Y-%m-%d') }}</small>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted">No ratings available yet. Start listing to get feedback!</p>
+            {% endif %}
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="btn-container">
+            <a href="{{ url_for('create_listing') }}" class="btn btn-primary">Create New Listing</a>
+            <a href="{{ url_for('view_listings') }}" class="btn btn-primary">View All Listings</a>
+            <a href="{{ url_for('view_live_auctions') }}" class="btn btn-primary">View Live Auctions</a>
+            <a href="{{ url_for('view_sold_auctions') }}" class="btn btn-primary">View Sold Auctions</a>
+        </div>
+        <a href="{{ url_for('dashboard') }}" class="back-to-dashboard">Back to Dashboard</a>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 TradeHubX. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

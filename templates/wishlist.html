@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Wishlist | TradeHubX</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to right, #141e30, #243b55);
+            font-family: 'Roboto', sans-serif;
+            color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.8rem;
+            font-weight: bold;
+            color: #f8f9fa;
+        }
+        .card {
+            background: #1f2833;
+            border: none;
+            border-radius: 15px;
+            color: #f8f9fa;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        }
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+            border-radius: 15px 15px 0 0;
+        }
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #66fcf1;
+        }
+        .btn-danger {
+            width: 100%;
+            font-weight: bold;
+            background: linear-gradient(to right, #ff5f6d, #ffc371);
+            border: none;
+            border-radius: 8px;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+        .btn-danger:hover {
+            background: linear-gradient(to right, #ffc371, #ff5f6d);
+            transform: translateY(-3px);
+        }
+        .no-items {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 1.2rem;
+            color: #adb5bd;
+        }
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #adb5bd;
+            padding: 20px 0;
+        }
+        footer a {
+            color: #66fcf1;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        .return-link {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .return-link a {
+            font-size: 1rem;
+            color: #66fcf1;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .return-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Your Wishlist</h1>
+        {% if properties %}
+        <div class="row g-4">
+            {% for property in properties %}
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="{{ url_for('static', filename='uploads/' + property.image_filename) }}" class="card-img-top" alt="{{ property.title }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ property.title }}</h5>
+                            <p class="card-text">{{ property.description }}</p>
+                            <p><strong>Price:</strong> ৳{{ property.price }}</p>
+                            <form action="{{ url_for('remove_from_wishlist', property_id=property.id) }}" method="post">
+                                <button type="submit" class="btn btn-danger">Remove</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="no-items">Your wishlist is empty. Start adding properties you love!</p>
+        {% endif %}
+        <div class="return-link">
+            <a href="{{ url_for('dashboard') }}">&larr; Back to Dashboard</a>
+        </div>
+        <footer>
+            <p>&copy; 2024 TradeHubX. All rights reserved.</p>
+        </footer>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

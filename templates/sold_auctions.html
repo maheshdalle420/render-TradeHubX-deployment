@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sold Auctions | TradeHubX</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to bottom, #121212, #1c1c1c);
+            color: #f8f9fa;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            margin-top: 50px;
+            max-width: 800px;
+            background: #212529;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            padding: 40px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .list-group-item {
+            background: #343a40;
+            color: #f8f9fa;
+            border: none;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .list-group-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7);
+        }
+        .list-group-item h5 {
+            color: #007bff;
+        }
+        .list-group-item p {
+            margin: 5px 0;
+        }
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: linear-gradient(to right, #495057, #6c757d);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease-in-out;
+        }
+        .btn:hover {
+            background: linear-gradient(to right, #343a40, #495057);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sold Auctions</h1>
+        {% if sold_auction_details %}
+        <ul class="list-group">
+            {% for detail in sold_auction_details %}
+                <li class="list-group-item">
+                    <h5>{{ detail.auction.title }}</h5>
+                    <p><strong>Sold For:</strong> ৳{{ detail.winning_bid if detail.winning_bid else 'No bids' }}</p>
+                    <p><strong>Payment Status:</strong> <span class="{{ 'text-success' if detail.is_paid else 'text-danger' }}">{{ 'Paid' if detail.is_paid else 'Unpaid' }}</span></p>
+                    {% if detail.winner %}
+                        <p><strong>Winner:</strong> {{ detail.winner.username }}</p>
+                    {% else %}
+                        <p><em>No winner for this auction.</em></p>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+            <p class="text-center text-muted">No sold auctions available at the moment.</p>
+        {% endif %}
+        <a href="{{ url_for('seller_dashboard') }}" class="btn">Back to Seller Dashboard</a>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

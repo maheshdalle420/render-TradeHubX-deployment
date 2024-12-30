@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TradeHubX - Your gateway to seamless trading solutions. Join us today for effortless trading experiences.">
+    <title>Home - TradeHubX</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* General Styling */
+        body {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        nav {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar-brand img {
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        /* Hero Section with Carousel */
+        .carousel-item {
+            height: 85vh;
+            min-height: 500px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            color:rgb(22, 21, 21);
+        }
+
+        .carousel-caption {
+            bottom: 20%;
+            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
+        }
+
+        .carousel-caption h1 {
+            font-size: 4rem;
+            font-weight: bold;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .carousel-caption p {
+            font-size: 1.5rem;
+            margin-top: 10px;
+        }
+
+        .carousel-caption .btn-custom {
+            margin-top: 20px;
+            padding: 12px 25px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            background: #007bff;
+            border: none;
+            color: #fff;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .carousel-caption .btn-custom:hover {
+            background: #0056b3;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            background: #212529;
+            color: #ccc;
+            padding: 10px;
+            text-align: center;
+            margin-top: auto;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #ffc107;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #ffffff;
+        }
+
+        footer .social-icons a {
+            color: #ccc;
+            font-size: 1.4rem;
+            margin: 0 8px;
+            transition: color 0.3s ease;
+        }
+
+        footer .social-icons a:hover {
+            color: #ffc107;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="{{ url_for('static', filename='uploads/logo.png') }}" alt="Logo">
+                TradeHubX
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Carousel -->
+    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active" style="background-image: url('{{ url_for('static', filename='uploads/slide1.jpg') }}');">
+                <div class="carousel-caption">
+                    <h1>Welcome to TradeHubX</h1>
+                    <p>Your gateway to seamless trading solutions.</p>
+                    <a href="{{ url_for('register') }}" class="btn btn-custom"><i class="fas fa-user-plus"></i> Register</a>
+                    <a href="{{ url_for('login') }}" class="btn btn-custom btn-outline-light"><i class="fas fa-sign-in-alt"></i> Login</a>
+                </div>
+            </div>
+            <div class="carousel-item" style="background-image: url('{{ url_for('static', filename='uploads/slide2.jpg') }}');">
+                <div class="carousel-caption">
+                    <h1>Developers</h1>
+                    <p>1. JUHAYER RAHMAN 
+                       2.MD.MOHAIMINUL ISLAM 
+                       3.RIFAT SANJIDA MARIA 
+                       4.ARIK AHMED SIDDIQUE</p>
+                </div>
+            </div>
+            <div class="carousel-item" style="background-image: url('{{ url_for('static', filename='uploads/slide3.jpg') }}');">
+                <div class="carousel-caption">
+                    <h1>BUY AND SELL YOUR PROPERTIES </h1>
+                    <p>Trade with confidence and peace of mind.</p>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 TradeHubX. All rights reserved.</p>
+        <a href="https://github.com/maheshdalle420/Trade_Hub-X" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
